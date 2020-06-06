@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  sut:
+    build:
+      context: .
+      args:
+        NODE_ENV: test
+    ports:
+      - "8083:83"
+    command: npm run test
