@@ -4,13 +4,8 @@ services:
     restart: always
     container_name: docker-mysql-db
     image: mysql
-    environment:
-      MYSQL_DATABASE: tracer_service
-      MYSQL_ROOT_USER: root
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_ROOT_HOST: '%'
-      MYSQL_USER: test
-      MYSQL_PASSWORD: pass
+    env_file:
+      - .env
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
     ports:
@@ -23,7 +18,8 @@ services:
 
   tracer-service:
     restart: on-failure
-    build: ./
+    image: matijmic/swa-tracer-service
+#    build: ./
     expose:
       - "10222"
     ports:
