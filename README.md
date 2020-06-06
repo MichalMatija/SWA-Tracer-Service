@@ -1,4 +1,4 @@
-#Tracer Service
+# Tracer Service
 
 Tracer Service monitors current car offers and sends e-mails in case of a match.  
 Uses mysql database.  
@@ -7,9 +7,9 @@ Running on:
 * port: 10222
 
 
-##API
+## API
 
-####Tracer
+#### Tracer
 Tracer controller has 4 methods:
 * add - for adding tracers
 * edit - for editing tracers
@@ -57,7 +57,7 @@ Url: **localhost:3306/tracer/remove**
 **GetAll**  
 Url: **localhost:3306/tracer/{1}**, where 1 is userId
 
-####Offer
+#### Offer
 
 Offer has 2 methods:
 * check - for adding and editing car offer
