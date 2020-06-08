@@ -1,11 +1,13 @@
 package cz.swa.carmart.core.service;
 
+import cz.swa.carmart.core.entity.Tracer;
 import cz.swa.carmart.core.entity.TracerOffer;
 import cz.swa.carmart.core.repository.TracerOfferRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,9 +38,16 @@ public class TracerOfferServiceImpl implements TracerOfferService {
 
     @Override
     public List<Long> getAllOffersByTracerId(Long tracerId) {
-        return tracerOfferRepository.getAllByTracerId(tracerId).stream()
-            .map(TracerOffer::getCarId)
-            .collect(Collectors.toList());
+        List<TracerOffer> allByTracerId = tracerOfferRepository.getAllByTracerId(tracerId);
+        List<Long> carIds = new ArrayList<>();
+        for (TracerOffer tracerOffer : allByTracerId) {
+            carIds.add(tracerOffer.getCarId());
+        }
+
+        return carIds;
+//        return allByTracerId.stream()
+//            .map(TracerOffer::getCarId)
+//            .collect(Collectors.toList());
     }
 
     @Override
