@@ -66,6 +66,10 @@ dependencies {
 //    testCompile group: 'junit', name: 'junit', version: '4.12'
     compile 'mysql:mysql-connector-java'
     compile 'com.auth0:java-jwt:3.4.0'
+    // https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-elastic
+    compile group: 'io.micrometer', name: 'micrometer-registry-elastic', version: '1.1.4'
+    // https://mvnrepository.com/artifact/org.zalando/logbook-spring-boot-starter
+    compile group: 'org.zalando', name: 'logbook-spring-boot-starter', version: '2.1.0'
     compile 'org.springframework.boot:spring-boot-starter-undertow'
 //    compile 'javax.xml.bind:jaxb-api:2.3.0'
     compile 'org.springframework.boot:spring-boot-starter-security'

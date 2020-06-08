@@ -7,7 +7,7 @@ services:
     env_file:
       - .env
     volumes:
-      - ./sql:/docker-entrypoint-initdb.d
+      - ./sql/tracer_service_init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     ports:
       - "3306:3306"
     healthcheck:
