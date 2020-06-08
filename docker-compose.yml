@@ -20,8 +20,8 @@ services:
     restart: on-failure
     image: matijmic/swa-tracer-service
 #    build: ./
-    expose:
-      - "10222"
+#    expose:
+#      - "10222"
     ports:
       - 10222:10222
     env_file:

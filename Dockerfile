@@ -7,4 +7,5 @@ RUN gradle build --no-daemon --stacktrace
 FROM openjdk:8-jre-alpine
 COPY --from=build /home/gradle/src/build/libs/*.jar swa-tracer-service-1.0-SNAPSHOT.jar
 ENV NODE_ENV test
+EXPOSE 10222
 ENTRYPOINT ["java","-jar","swa-tracer-service-1.0-SNAPSHOT.jar"]
