@@ -18,8 +18,8 @@ services:
 
   tracer-service:
     restart: on-failure
-#    image: matijmic/swa-tracer-service
-    build: ./
+    image: matijmic/swa-tracer-service
+#    build: ./
     expose:
       - "10222"
     ports:
