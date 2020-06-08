@@ -65,8 +65,9 @@ dependencies {
 
 //    testCompile group: 'junit', name: 'junit', version: '4.12'
     compile 'mysql:mysql-connector-java'
+    compile 'com.auth0:java-jwt:3.4.0'
     compile 'org.springframework.boot:spring-boot-starter-undertow'
-    compile 'javax.xml.bind:jaxb-api:2.3.0'
+//    compile 'javax.xml.bind:jaxb-api:2.3.0'
     compile 'org.springframework.boot:spring-boot-starter-security'
 }
 dependencyManagement {

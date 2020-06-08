@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 public class OfferController {
 
@@ -22,13 +24,16 @@ public class OfferController {
     }
 
     @RequestMapping(value = "/offer/check", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void check(@RequestBody CheckRequestTO request) {
+    public void check(@RequestBody CheckRequestTO request, HttpServletResponse response) {
         tracerFacade.check(request.getUserId(), OfferMapper.mapToDomain(request));
+
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 
     @RequestMapping(value = "/offer/{carId}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void remove(@RequestBody Long carId) {
-
+    public void remove(@RequestBody Long carId, HttpServletResponse response) {
+        tracerFacade.removeCar(carId);
+        response.setStatus(HttpServletResponse.SC_NO_CONTENT);
     }
 
 }

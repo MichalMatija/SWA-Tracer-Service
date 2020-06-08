@@ -18,13 +18,16 @@ services:
 
   tracer-service:
     restart: on-failure
-    image: matijmic/swa-tracer-service
-#    build: ./
+#    image: matijmic/swa-tracer-service
+    build: ./
     expose:
       - "10222"
     ports:
       - 10222:10222
-    environment:
-      WAIT_HOSTS: mysql:3306
+    env_file:
+      - tracer-service.env
     depends_on:
       - docker-mysql-db
+
+volumes:
+  docker-mysql-db:

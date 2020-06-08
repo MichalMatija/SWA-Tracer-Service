@@ -17,5 +17,11 @@ public interface TracerFacade {
 
     void check(Long userId, CarInfo carInfo);
 
+    void checkCars(Tracer tracer);
+
+    List<CarInfo> getAllCarsByTracerId(long tracerId);
+
+    List<CarInfo> getAllCarsByUserId(long userId);
+
     void removeCar(Long carId);
 }

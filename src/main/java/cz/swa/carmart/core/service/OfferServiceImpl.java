@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class OfferServiceImpl implements OfferService {
@@ -27,6 +29,16 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public void removeCar(Long carId) {
         offerRepository.deleteByCarId(carId);
+    }
+
+    @Override
+    public List<Offer> getAllValidOffer(int priceFrom, int priceTo, String model) {
+        return offerRepository.getAllValidOffers(priceFrom, priceTo, model);
+    }
+
+    @Override
+    public List<Offer> getAllByCarIds(List<Long> carIds) {
+        return offerRepository.findByCarIdIn(carIds);
     }
 
     private Offer createOffer(Long userId, CarInfo carInfo) {
