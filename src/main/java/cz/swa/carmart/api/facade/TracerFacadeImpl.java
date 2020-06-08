@@ -1,17 +1,8 @@
 package cz.swa.carmart.api.facade;
 
-import cz.swa.carmart.core.entity.CarInfo;
-import cz.swa.carmart.core.entity.Offer;
-import cz.swa.carmart.core.entity.Tracer;
-import cz.swa.carmart.core.entity.TracerOffer;
-import cz.swa.carmart.core.entity.User;
-import cz.swa.carmart.core.service.EmailService;
-import cz.swa.carmart.core.service.OfferService;
-import cz.swa.carmart.core.service.TracerOfferService;
-import cz.swa.carmart.core.service.TracerService;
-import cz.swa.carmart.core.service.UserService;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +12,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import cz.swa.carmart.config.UserDetails;
+import cz.swa.carmart.core.entity.CarInfo;
+import cz.swa.carmart.core.entity.Offer;
+import cz.swa.carmart.core.entity.Tracer;
+import cz.swa.carmart.core.entity.TracerOffer;
+import cz.swa.carmart.core.service.EmailService;
+import cz.swa.carmart.core.service.OfferService;
+import cz.swa.carmart.core.service.TracerOfferService;
+import cz.swa.carmart.core.service.TracerService;
+
 @Component
 @Transactional
 public class TracerFacadeImpl implements TracerFacade {
@@ -29,16 +30,14 @@ public class TracerFacadeImpl implements TracerFacade {
     private final OfferService offerService;
     private final EmailService emailService;
     private final TracerOfferService tracerOfferService;
-    private final UserService userService;
 
     @Autowired
     public TracerFacadeImpl(TracerService tracerService, OfferService offerService, EmailService emailService,
-                            TracerOfferService tracerOfferService, UserService userService) {
+                            TracerOfferService tracerOfferService) {
         this.tracerService = tracerService;
         this.offerService = offerService;
         this.emailService = emailService;
         this.tracerOfferService = tracerOfferService;
-        this.userService = userService;
     }
 
     @Override
@@ -66,10 +65,10 @@ public class TracerFacadeImpl implements TracerFacade {
     public void check(Long userId, CarInfo carInfo) {
         List<Tracer> tracers = tracerService.getAllTracersByPrice(carInfo.getPrice());
         offerService.addCar(userId, carInfo);
-        User user = userService.getUser();
+        UserDetails userDetails = getUserDetails();
         for (Tracer tracer : tracers) {
             String subject = "LFFM - Sledovač vysliedil";
-            emailService.notifyUsers(user.getEmail(), subject, emailService.getEmailMessage(carInfo));
+            emailService.notifyUsers(userDetails.getEmail(), subject, emailService.getEmailMessage(carInfo));
             tracerOfferService.save(createTracerOffer(tracer.getTracerId(), carInfo.getCarId()));
         }
     }
@@ -77,11 +76,11 @@ public class TracerFacadeImpl implements TracerFacade {
     @Override
     public void checkCars(Tracer tracer) {
         List<Offer> validOfferCars = offerService.getAllValidOffer(tracer.getPriceFrom(), tracer.getPriceTo(), tracer.getModel());
-
+        UserDetails userDetails = getUserDetails();
         for (Offer offer : validOfferCars) {
-            String email = "michalmatija@gmail.com";
             String subject = "LFFM - Sledovač vysliedil";
-            emailService.notifyUsers(email, subject, emailService.getEmailMessage(createCarInfo(offer.getCarId(), offer.getPrice(), offer.getModel())));
+            emailService.notifyUsers(userDetails.getEmail(), subject,
+                                     emailService.getEmailMessage(createCarInfo(offer.getCarId(), offer.getPrice(), offer.getModel())));
             tracerOfferService.save(createTracerOffer(tracer.getTracerId(), offer.getCarId()));
         }
     }
@@ -155,5 +154,11 @@ public class TracerFacadeImpl implements TracerFacade {
         }
 
         return carInfos;
+    }
+
+    private UserDetails getUserDetails() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return (UserDetails) authentication.getPrincipal();
     }
 }
